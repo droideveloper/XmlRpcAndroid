@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<issues format="4" by="lint 3.2.1">
+
+    <issue
+        id="InvalidPackage"
+        severity="Error"
+        message="Invalid package reference in library; not included in Android: `javax.xml.stream.events`. Referenced from `org.simpleframework.xml.stream.StreamReader`."
+        category="Correctness"
+        priority="6"
+        summary="Package not included in Android"
+        explanation="This check scans through libraries looking for calls to APIs that are not included in Android.&#xA;&#xA;When you create Android projects, the classpath is set up such that you can only access classes in the API packages that are included in Android. However, if you add other projects to your libs/ folder, there is no guarantee that those .jar files were built with an Android specific classpath, and in particular, they could be accessing unsupported APIs such as java.applet.&#xA;&#xA;This check scans through library jars and looks for references to API packages that are not included in Android and flags these. This is only an error if your code calls one of the library classes which wind up referencing the unsupported package.">
+        <location
+            file="/Users/fatih/.gradle/caches/modules-2/files-2.1/org.simpleframework/simple-xml/2.7.1/dd91fb744c2ff921407475cb29a1e3fee397d411/simple-xml-2.7.1.jar"/>
+    </issue>
+
+    <issue
+        id="InvalidPackage"
+        severity="Error"
+        message="Invalid package reference in library; not included in Android: `javax.xml.stream`. Referenced from `org.simpleframework.xml.stream.StreamProvider`."
+        category="Correctness"
+        priority="6"
+        summary="Package not included in Android"
+        explanation="This check scans through libraries looking for calls to APIs that are not included in Android.&#xA;&#xA;When you create Android projects, the classpath is set up such that you can only access classes in the API packages that are included in Android. However, if you add other projects to your libs/ folder, there is no guarantee that those .jar files were built with an Android specific classpath, and in particular, they could be accessing unsupported APIs such as java.applet.&#xA;&#xA;This check scans through library jars and looks for references to API packages that are not included in Android and flags these. This is only an error if your code calls one of the library classes which wind up referencing the unsupported package.">
+        <location
+            file="/Users/fatih/.gradle/caches/modules-2/files-2.1/org.simpleframework/simple-xml/2.7.1/dd91fb744c2ff921407475cb29a1e3fee397d411/simple-xml-2.7.1.jar"/>
+    </issue>
+
+</issues>

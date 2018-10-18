@@ -28,10 +28,11 @@ android {
 }
 
 dependencies {
-  implementation 'com.squareup.retrofit2:retrofit:2.4.0'
-  implementation 'com.squareup.okhttp3:okhttp:3.10.0'
+  implementation "com.squareup.retrofit2:retrofit:$RETROFIT_VERSION"
+  implementation "com.squareup.okhttp3:okhttp:$OK_HTTP_VERSION"
+  implementation "com.squareup.okio:okio:$OKIO_VERSION"
 
-  implementation('org.simpleframework:simple-xml:2.7.1') {
+  implementation("org.simpleframework:simple-xml:$SIMPLE_XML_VERSION") {
     exclude module: 'stax'
     exclude module: 'stax-api'
     exclude module: 'xpp3'

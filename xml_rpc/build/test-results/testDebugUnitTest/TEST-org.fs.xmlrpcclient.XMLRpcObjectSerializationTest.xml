@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="org.fs.xmlrpcclient.XMLRpcObjectSerializationTest" tests="5" skipped="0" failures="0" errors="0" timestamp="2018-10-18T12:17:52" hostname="Fatih-MacBook-Pro.local" time="0.1">
+<testsuite name="org.fs.xmlrpcclient.XMLRpcObjectSerializationTest" tests="5" skipped="0" failures="0" errors="0" timestamp="2018-10-18T12:32:14" hostname="Fatih-MacBook-Pro.local" time="0.087">
   <properties/>
-  <testcase name="testObjectWithInteger" classname="org.fs.xmlrpcclient.XMLRpcObjectSerializationTest" time="0.074"/>
-  <testcase name="testObjectWithString" classname="org.fs.xmlrpcclient.XMLRpcObjectSerializationTest" time="0.005"/>
+  <testcase name="testObjectWithInteger" classname="org.fs.xmlrpcclient.XMLRpcObjectSerializationTest" time="0.061"/>
+  <testcase name="testObjectWithString" classname="org.fs.xmlrpcclient.XMLRpcObjectSerializationTest" time="0.006"/>
   <testcase name="testObjectWithDate" classname="org.fs.xmlrpcclient.XMLRpcObjectSerializationTest" time="0.015"/>
-  <testcase name="testObjectWithLong" classname="org.fs.xmlrpcclient.XMLRpcObjectSerializationTest" time="0.003"/>
-  <testcase name="testObjectWithBoolean" classname="org.fs.xmlrpcclient.XMLRpcObjectSerializationTest" time="0.002"/>
+  <testcase name="testObjectWithLong" classname="org.fs.xmlrpcclient.XMLRpcObjectSerializationTest" time="0.002"/>
+  <testcase name="testObjectWithBoolean" classname="org.fs.xmlrpcclient.XMLRpcObjectSerializationTest" time="0.003"/>
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>

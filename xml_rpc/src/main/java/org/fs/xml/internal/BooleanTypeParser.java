@@ -20,33 +20,55 @@ import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlSerializer;
 
 import java.io.IOException;
+import java.util.Locale;
+
+import static org.fs.xml.util.C.BOOLEAN_BINARY_STYLE;
+import static org.fs.xml.util.C.BOOLEAN_STRING_STYLE;
 
 class BooleanTypeParser implements TypeParser<Boolean> {
 
-  public final static int STYLE_BINARY = 0x01;
-  public final static int STYLE_STRING = 0x02;
+  private static BooleanTypeParser instance;
 
-  private final int style;
-
-  public static BooleanTypeParser create(int style) {
-    return new BooleanTypeParser(style);
+  static BooleanTypeParser getInstance(@BooleanStyle int style) {
+    synchronized (BooleanTypeParser.class) {
+      if (instance == null) {
+        instance = new BooleanTypeParser(style);
+      }
+      instance.setStyle(style);
+      return instance;
+    }
   }
 
-  private BooleanTypeParser(int style) {
+  @BooleanStyle private int style;
+
+  BooleanTypeParser(@BooleanStyle int style) {
     this.style = style;
-    if (style < STYLE_BINARY || style > STYLE_STRING) {
-      throw new IllegalArgumentException("style is not supported");
+    if (style < BOOLEAN_BINARY_STYLE || style > BOOLEAN_STRING_STYLE) {
+      final String error = String.format(Locale.getDefault(), "style for %d is not supported please use %d or %d",
+              style, BOOLEAN_BINARY_STYLE, BOOLEAN_STRING_STYLE);
+      throw new IllegalArgumentException(error);
+    }
+  }
+
+  void setStyle(@BooleanStyle int style) {
+    this.style = style;
+    if (style < BOOLEAN_BINARY_STYLE || style > BOOLEAN_STRING_STYLE) {
+      final String error = String.format(Locale.getDefault(), "style for %d is not supported please use %d or %d",
+              style, BOOLEAN_BINARY_STYLE, BOOLEAN_STRING_STYLE);
+      throw new IllegalArgumentException(error);
     }
   }
 
   @Override public void write(XmlSerializer writer, Boolean value) throws IOException {
     writer.startTag(null, Constants.BOOLEAN);
-    if (style == STYLE_BINARY) {
+    if (style == BOOLEAN_BINARY_STYLE) {
       writer.text(String.valueOf(value ? 1 : 0));
-    } else if (style == STYLE_STRING) {
+    } else if (style == BOOLEAN_STRING_STYLE) {
       writer.text(String.valueOf(value));
     } else {
-      throw new IOException("style and data are no good");
+      final String error = String.format(Locale.getDefault(), "style for %d is not supported please use %d or %d",
+              style, BOOLEAN_BINARY_STYLE, BOOLEAN_STRING_STYLE);
+      throw new IOException(error);
     }
     writer.endTag(null, Constants.BOOLEAN);
   }
@@ -62,12 +84,14 @@ class BooleanTypeParser implements TypeParser<Boolean> {
     }
     //go on next START_TAG
     reader.next();
-    if (style == STYLE_BINARY) {
-      return Integer.parseInt(text) == 1;
-    } else if (style == STYLE_STRING) {
-      return Boolean.parseBoolean(text);
+    if (style == BOOLEAN_BINARY_STYLE) {
+      return text != null && Integer.parseInt(text) == 1;
+    } else if (style == BOOLEAN_STRING_STYLE) {
+      return text != null && Boolean.parseBoolean(text);
     } else {
-      throw new IOException("style and data are no good");
+      final String error = String.format(Locale.getDefault(), "style for %d is not supported please use %d or %d",
+              style, BOOLEAN_BINARY_STYLE, BOOLEAN_STRING_STYLE);
+      throw new IOException(error);
     }
   }
 

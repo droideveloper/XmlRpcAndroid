@@ -20,16 +20,25 @@ import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlSerializer;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 class IntegerTypeParser implements TypeParser<Integer> {
 
-  private final String preferred;
+  private static Map<String, TypeParser<Integer>> cache = new HashMap<>();
 
-  public static IntegerTypeParser create(String preferred) {
-    return new IntegerTypeParser(preferred);
+  static TypeParser<Integer> getInstance(String preferred) {
+    synchronized (IntegerTypeParser.class) {
+      if (!cache.containsKey(preferred)) {
+        cache.put(preferred, new IntegerTypeParser(preferred));
+      }
+      return cache.get(preferred);
+    }
   }
 
-  private IntegerTypeParser(String preferred) {
+  private String preferred;
+
+  IntegerTypeParser(String preferred) {
     this.preferred = preferred;
   }
 

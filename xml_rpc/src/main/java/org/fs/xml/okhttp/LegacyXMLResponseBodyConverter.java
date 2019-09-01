@@ -15,7 +15,7 @@
  */
 package org.fs.xml.okhttp;
 
-import org.fs.xml.internal.Parser;
+import org.fs.xml.internal.Parsers;
 import org.fs.xml.net.XMLRpcResponse;
 
 import java.io.IOException;
@@ -26,23 +26,20 @@ import retrofit2.Converter;
 
 public class LegacyXMLResponseBodyConverter implements Converter<ResponseBody, XMLRpcResponse> {
 
-  private final String UTF_8 = "UTF-8";
-  private final Parser parser;
+  private static final String UTF_8 = "UTF-8";
+  private final Parsers parser;
 
-  public static LegacyXMLResponseBodyConverter create(Parser parser) {
+  public static LegacyXMLResponseBodyConverter create(Parsers parser) {
     return new LegacyXMLResponseBodyConverter(parser);
   }
 
-  private LegacyXMLResponseBodyConverter(Parser parser) {
+  private LegacyXMLResponseBodyConverter(Parsers parser) {
     this.parser = parser;
   }
 
   @Override public XMLRpcResponse convert(ResponseBody response) throws IOException {
-    InputStream in = response.byteStream();
-    try {
+    try (InputStream in = response.byteStream()) {
       return parser.read(in, UTF_8);
-    } finally {
-      in.close();
     }
   }
 }

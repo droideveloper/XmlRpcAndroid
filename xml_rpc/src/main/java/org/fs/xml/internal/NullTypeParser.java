@@ -23,12 +23,18 @@ import java.io.IOException;
 
 class NullTypeParser implements TypeParser<Object> {
 
-  public static NullTypeParser create() {
-    return new NullTypeParser();
+  private static NullTypeParser instance;
+
+  static TypeParser<Object> getInstance() {
+    synchronized (NullTypeParser.class) {
+      if (instance == null) {
+        instance = new NullTypeParser();
+      }
+      return instance;
+    }
   }
 
-  private NullTypeParser() {
-  }
+  NullTypeParser() { }
 
   @Override public void write(XmlSerializer writer, Object value) throws IOException {
     writer.startTag(null, Constants.NIL);

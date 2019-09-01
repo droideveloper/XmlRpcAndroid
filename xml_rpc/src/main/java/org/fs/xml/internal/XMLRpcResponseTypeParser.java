@@ -31,11 +31,21 @@ class XMLRpcResponseTypeParser implements TypeParser<XMLRpcResponse> {
   private final static String VALUE = "value";
   private final static String FAULT = "fault";
 
-  public static XMLRpcResponseTypeParser create() {
-    return new XMLRpcResponseTypeParser();
+  private static TypeParser<XMLRpcResponse> instance;
+
+  static TypeParser<XMLRpcResponse> getInstance() {
+    synchronized (XMLRpcResponseTypeParser.class) {
+      if (instance == null) {
+        instance = new XMLRpcResponseTypeParser();
+      }
+      return instance;
+    }
   }
 
+  private final Parsers parsers;
+
   private XMLRpcResponseTypeParser() {
+    parsers = Parsers.getInstance();
   }
 
   @SuppressWarnings("unchecked") @Override public void write(XmlSerializer writer, XMLRpcResponse value) throws IOException {
@@ -46,7 +56,7 @@ class XMLRpcResponseTypeParser implements TypeParser<XMLRpcResponse> {
       for (Parameter param : params) {
         writer.startTag(null, PARAM);
         writer.startTag(null, VALUE);
-        TypeParser converter = Parser.findWriteParser(param.asNil());
+        TypeParser converter = parsers.resolveWrite(param.asNil());
         converter.write(writer, param.asNil());//asNil method returns as object regardless if it's null or not
         writer.endTag(null, VALUE);
         writer.endTag(null, PARAM);
@@ -55,7 +65,7 @@ class XMLRpcResponseTypeParser implements TypeParser<XMLRpcResponse> {
     } else {
       writer.startTag(null, FAULT);
       writer.startTag(null, VALUE);
-      TypeParser converter = Parser.findWriteParser(value.fault());
+      TypeParser converter = parsers.resolveWrite(value.fault());
       converter.write(writer, value.fault());
       writer.endTag(null, VALUE);
       writer.endTag(null, FAULT);
@@ -80,7 +90,7 @@ class XMLRpcResponseTypeParser implements TypeParser<XMLRpcResponse> {
           } else if (FAULT.equalsIgnoreCase(text)) {
             isSuccess = false;
           } else if (text != null) {
-            TypeParser converter = Parser.findReadParser(reader);
+            TypeParser converter = parsers.resolveRead(reader);
             Object o = converter.read(reader);
             if (isSuccess) {
               response.addParameter(Parameter.create(o));

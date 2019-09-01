@@ -17,6 +17,7 @@ package org.fs.xml.internal;
 
 import org.fs.xml.net.XMLRpcRequest;
 import org.fs.xml.net.XMLRpcResponse;
+import org.fs.xml.util.C;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserFactory;
 import org.xmlpull.v1.XmlSerializer;
@@ -29,31 +30,67 @@ import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
 
-public final class Parser {
+import static org.fs.xml.internal.Constants.INTEGER_V1;
+import static org.fs.xml.internal.Constants.INTEGER_V2;
+import static org.fs.xml.internal.Constants.INTEGER_V3;
+import static org.fs.xml.internal.Constants.LONG_V1;
+import static org.fs.xml.internal.Constants.LONG_V2;
+import static org.fs.xml.internal.Constants.XML_SCHEMA;
+import static org.fs.xml.util.C.BOOLEAN_BINARY_STYLE;
+import static org.fs.xml.util.C.BOOLEAN_STRING_STYLE;
+import static org.fs.xml.util.C.STRING_NO_WRAP_STYLE;
+import static org.fs.xml.util.C.STRING_WRAP_STYLE;
 
-  private final static List<TypeParser<?>> converters;
+public final class Parsers {
 
-  static {
-    converters = new ArrayList<>();
-    converters.add(Base64StringTypeParser.create());
-    converters.add(IntegerTypeParser.create(Constants.INTEGER_V1));
-    converters.add(IntegerTypeParser.create(Constants.INTEGER_V2));
-    converters.add(IntegerTypeParser.create(Constants.INTEGER_V3));
-    converters.add(LongTypeParser.create(Constants.LONG_V1));
-    converters.add(LongTypeParser.create(Constants.LONG_V2));
-    converters.add(CollectionTypeParser.create());
-    converters.add(StructTypeParser.create());
-    converters.add(DoubleTypeParser.create());
-    converters.add(NullTypeParser.create());
-    converters.add(FloatTypeParser.create());
-    converters.add(XMLRpcRequestTypeParser.create());//request
-    converters.add(XMLRpcResponseTypeParser.create());//response
+  private static Parsers instance;
+
+  public static Parsers getInstance() {
+    synchronized (Parsers.class) {
+      if (instance == null) {
+        instance = new Parsers();
+      }
+      return instance;
+    }
   }
+
+  private final List<TypeParser<?>> converters;
+  private Boolean prettyPrintEnabled;
 
   /**
    * <p>Constructor</p>
    */
-  public Parser() {
+  private Parsers() {
+    converters = new ArrayList<>();
+    converters.add(Base64StringTypeParser.getInstance());
+    converters.add(IntegerTypeParser.getInstance(INTEGER_V1));
+    converters.add(IntegerTypeParser.getInstance(INTEGER_V2));
+    converters.add(IntegerTypeParser.getInstance(INTEGER_V3));
+    converters.add(LongTypeParser.getInstance(LONG_V1));
+    converters.add(LongTypeParser.getInstance(LONG_V2));
+    converters.add(CollectionTypeParser.getInstance());
+    converters.add(StructTypeParser.getInstance());
+    converters.add(DoubleTypeParser.getInstance());
+    converters.add(NullTypeParser.getInstance());
+    converters.add(FloatTypeParser.getInstance());
+    converters.add(XMLRpcRequestTypeParser.getInstance()); // request
+    converters.add(XMLRpcResponseTypeParser.getInstance()); // response
+  }
+
+  /**
+   * set whether it is allowed to print pretty xml or not
+   * @param prettyPrintEnabled param to enable pretty print on output xml file
+   */
+  public void setPrettyPrintEnabled(Boolean prettyPrintEnabled) {
+    this.prettyPrintEnabled = prettyPrintEnabled;
+  }
+
+  /**
+   * if pretty printing enabled we do print it that way
+   * @return default is false
+   */
+  public Boolean getPrettyPrintEnabled() {
+    return prettyPrintEnabled;
   }
 
   /**
@@ -61,11 +98,11 @@ public final class Parser {
    *
    * @param plain true if plain string read/write action
    */
-  public void addStringConverter(boolean plain) {
+  public void registerStringConverter(boolean plain) {
     if (plain) {
-      converters.add(StringTypeParser.create(StringTypeParser.STYLE_NO_WRAP));
+      converters.add(StringTypeParser.getInstance(STRING_NO_WRAP_STYLE));
     } else {
-      converters.add(StringTypeParser.create(StringTypeParser.STYLE_WRAP));
+      converters.add(StringTypeParser.getInstance(STRING_WRAP_STYLE));
     }
   }
 
@@ -74,11 +111,11 @@ public final class Parser {
    *
    * @param binary true if binary boolean read/write action
    */
-  public void addBooleanConverter(boolean binary) {
+  public void registerBooleanConverter(boolean binary) {
     if (binary) {
-      converters.add(BooleanTypeParser.create(BooleanTypeParser.STYLE_BINARY));
+      converters.add(BooleanTypeParser.getInstance(BOOLEAN_BINARY_STYLE));
     } else {
-      converters.add(BooleanTypeParser.create(BooleanTypeParser.STYLE_STRING));
+      converters.add(BooleanTypeParser.getInstance(BOOLEAN_STRING_STYLE));
     }
   }
 
@@ -86,8 +123,8 @@ public final class Parser {
    * <p>Date converter default instance provided as "yyyyMMdd'T'HH:mm:ss", Locale#getDefault() and
    * TimeZone#getTimeZone(String)</p>
    */
-  public void addDateConverter() {
-    converters.add(DateTypeParser.create());
+  public void registerDateConverter() {
+    converters.add(DateTypeParser.getInstance());
   }
 
   /**
@@ -96,8 +133,8 @@ public final class Parser {
    *
    * @param formatStr dateFormat String
    */
-  public void addDateConverter(String formatStr) {
-    converters.add(DateTypeParser.create(formatStr));
+  public void registerDateConverter(String formatStr) {
+    converters.add(DateTypeParser.getInstance(formatStr));
   }
 
   /**
@@ -106,8 +143,8 @@ public final class Parser {
    * @param formatStr dateFormat String
    * @param locale Locale instance
    */
-  public void addDateConverter(String formatStr, Locale locale) {
-    converters.add(DateTypeParser.create(formatStr, locale));
+  public void registerDateConverter(String formatStr, Locale locale) {
+    converters.add(DateTypeParser.getInstance(formatStr, locale));
   }
 
   /**
@@ -117,8 +154,8 @@ public final class Parser {
    * @param locale Locale instance
    * @param timeZone TimeZone instance
    */
-  public void addDateConverter(String formatStr, Locale locale, TimeZone timeZone) {
-    converters.add(DateTypeParser.create(formatStr, locale, timeZone));
+  public void registerDateConverter(String formatStr, Locale locale, TimeZone timeZone) {
+    converters.add(DateTypeParser.getInstance(formatStr, locale, timeZone));
   }
 
   /**
@@ -137,15 +174,15 @@ public final class Parser {
       XmlSerializer xmlWriter = factory.newSerializer();
       xmlWriter.setOutput(writer);
       xmlWriter.startDocument(charSet, null);//no standalone should be written
-      xmlWriter.setFeature("http://xmlpull.org/v1/doc/features.html#indent-output", true);//pretty xml
-      TypeParser converter = findWriteParser(request);
+      xmlWriter.setFeature(XML_SCHEMA, prettyPrintEnabled);//pretty xml
+      TypeParser converter = resolveWrite(request);
       //there is nothing else coming here
       if (converter instanceof XMLRpcRequestTypeParser) {
         XMLRpcRequestTypeParser requestParser = (XMLRpcRequestTypeParser) converter;
         requestParser.write(xmlWriter, request);
       }
-      xmlWriter.endDocument();//don't forget to end document
-      xmlWriter.flush();//don't forget to flush
+      xmlWriter.endDocument(); // don't forget to end document
+      xmlWriter.flush(); // don't forget to flush
     } catch (Exception e) {
       throw new IOException(e);
     }
@@ -166,8 +203,8 @@ public final class Parser {
       factory.setNamespaceAware(true);
       XmlPullParser xmlReader = factory.newPullParser();
       xmlReader.setInput(in, charSet);
-      xmlReader.next();//start gone
-      TypeParser converter = findReadParser(xmlReader);
+      xmlReader.next(); // start gone
+      TypeParser converter = resolveRead(xmlReader);
       Object o = converter.read(xmlReader);
       return (XMLRpcResponse) o;
     } catch (Exception e) {
@@ -182,7 +219,7 @@ public final class Parser {
    * @return TypeParser instance that is fit to be for next read
    * @throws RuntimeException if no typeParser instance found for this reader position
    */
-  static TypeParser findReadParser(XmlPullParser reader) {
+  TypeParser resolveRead(XmlPullParser reader) {
     for (TypeParser converter : converters) {
       if (converter.hasRead(reader)) {
         return converter;
@@ -198,7 +235,7 @@ public final class Parser {
    * @return TypeParser instance that is fit to be for next write
    * @throws RuntimeException if this object can not be handled by our registered writers
    */
-  static TypeParser findWriteParser(Object object) {
+  TypeParser resolveWrite(Object object) {
     for (TypeParser converter : converters) {
       if (converter.hasWrite(object)) {
         return converter;

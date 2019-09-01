@@ -22,11 +22,18 @@ import org.xmlpull.v1.XmlSerializer;
 
 class DoubleTypeParser implements TypeParser<Double> {
 
-  public static DoubleTypeParser create() {
-    return new DoubleTypeParser();
+  private static TypeParser<Double> instance;
+
+  static TypeParser<Double> getInstance() {
+    synchronized (DoubleTypeParser.class) {
+      if (instance == null) {
+        instance = new DoubleTypeParser();
+      }
+      return instance;
+    }
   }
 
-  private DoubleTypeParser() { }
+  DoubleTypeParser() { }
 
   @Override public void write(XmlSerializer writer, Double value) throws IOException {
     writer.startTag(null, Constants.DOUBLE);

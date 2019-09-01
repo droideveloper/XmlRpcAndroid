@@ -31,11 +31,21 @@ class XMLRpcRequestTypeParser implements TypeParser<XMLRpcRequest> {
   private final static String PARAM = "param";
   private final static String VALUE = "value";
 
-  public static XMLRpcRequestTypeParser create() {
-    return new XMLRpcRequestTypeParser();
+  private static TypeParser<XMLRpcRequest> instance;
+
+  static TypeParser<XMLRpcRequest> getInstance() {
+    synchronized (XMLRpcRequestTypeParser.class) {
+      if (instance == null) {
+        instance = new XMLRpcRequestTypeParser();
+      }
+      return instance;
+    }
   }
 
-  private XMLRpcRequestTypeParser() {
+  private final Parsers parsers;
+
+  XMLRpcRequestTypeParser() {
+    parsers = Parsers.getInstance();
   }
 
   @SuppressWarnings("unchecked") @Override public void write(XmlSerializer writer, XMLRpcRequest value) throws IOException {
@@ -50,7 +60,7 @@ class XMLRpcRequestTypeParser implements TypeParser<XMLRpcRequest> {
     for (Parameter param : parameters) {
       writer.startTag(null, PARAM);
       writer.startTag(null, VALUE);
-      TypeParser converter = Parser.findWriteParser(param.asNil());
+      TypeParser converter = parsers.resolveWrite(param.asNil());
       converter.write(writer, param.asNil());//unchecked says yet it's the fitting one for write
       writer.endTag(null, VALUE);
       writer.endTag(null, PARAM);
@@ -78,7 +88,7 @@ class XMLRpcRequestTypeParser implements TypeParser<XMLRpcRequest> {
               continue;
             }
           } else if (text != null) {
-            TypeParser converter = Parser.findReadParser(reader);
+            TypeParser converter = parsers.resolveRead(reader);
             Object object = converter.read(reader);
             if (request != null) {
               request.addParameter(Parameter.create(object));

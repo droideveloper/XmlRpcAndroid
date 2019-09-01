@@ -20,16 +20,25 @@ import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlSerializer;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 class LongTypeParser implements TypeParser<Long> {
 
-  private final String preferred;
+  private final static Map<String, TypeParser<Long>> cache = new HashMap<>();
 
-  public static LongTypeParser create(String preferred) {
-    return new LongTypeParser(preferred);
+  static TypeParser<Long> getInstance(String preferred) {
+    synchronized (LongTypeParser.class) {
+      if (!cache.containsKey(preferred)) {
+        cache.put(preferred, new LongTypeParser(preferred));
+      }
+      return cache.get(preferred);
+    }
   }
 
-  private LongTypeParser(String preferred) {
+  private String preferred;
+
+  LongTypeParser(String preferred) {
     this.preferred = preferred;
   }
 

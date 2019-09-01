@@ -15,7 +15,7 @@
  */
 package org.fs.xml.okhttp;
 
-import org.fs.xml.internal.Parser;
+import org.fs.xml.internal.Parsers;
 import org.fs.xml.net.XMLRpcRequest;
 
 import java.io.IOException;
@@ -31,13 +31,13 @@ public class LegacyXMLRequestBodyConverter implements Converter<XMLRpcRequest, R
   private final static MediaType MEDIA_TYPE = MediaType.parse("text/xml; charset=UTF-8");
   private final static String UTF_8 = "UTF-8";
 
-  private final Parser parser;
+  private final Parsers parser;
 
-  public static LegacyXMLRequestBodyConverter create(final Parser parser) {
+  public static LegacyXMLRequestBodyConverter create(final Parsers parser) {
     return new LegacyXMLRequestBodyConverter(parser);
   }
 
-  private LegacyXMLRequestBodyConverter(final Parser parser) {
+  private LegacyXMLRequestBodyConverter(final Parsers parser) {
     this.parser = parser;
   }
 
@@ -47,8 +47,8 @@ public class LegacyXMLRequestBodyConverter implements Converter<XMLRpcRequest, R
       OutputStreamWriter out = new OutputStreamWriter(buffer.outputStream(), UTF_8);
       parser.write(out, request, UTF_8);
       out.flush();
-    } catch (Exception wrapped) {
-      throw new RuntimeException(wrapped);
+    } catch (Exception actual) {
+      throw new IOException(actual);
     }
     return RequestBody.create(MEDIA_TYPE, buffer.readByteString());
   }

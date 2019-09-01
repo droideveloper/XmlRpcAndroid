@@ -8,7 +8,7 @@ if you are using retrofit
 ```java
 Retrofit retrofit = new Retrofit.Builder()
                                 .baseUrl("YOUR_ENDPOINT_URL")    
-                                .addConverterFactory(LegacyConverterFactory.create())//or send parser with #create(Parser)
+                                .addConverterFactory(LegacyConverterFactory.create())Parsers
                                 ....
                                 .build();
                                 
@@ -95,7 +95,7 @@ XMLRpcRequest request = XMLRpcRequest.create("SampleMethodName")
                                      .addParameter(Parameter.create(new java.util.Date()))
                                      .addParameter(Parameter.create(1));
    
-Parser parser = new Parser(); //create new Parser
+Parser parser = new Parser(); Parsers
 parser.addBooleanConverter(true); //set style of boolean true means <code>1 or 0</code> false means <code>true or false</code>
 parser.addStringConverter(false); //set string style wrap with <string> tag or not
 parser.addDateConverter("yyyy-MM-dd'T'HH:mm:ss", //this provides advenced level of date read and write

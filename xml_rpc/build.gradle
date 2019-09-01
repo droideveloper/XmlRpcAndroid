@@ -28,6 +28,7 @@ android {
 }
 
 dependencies {
+  implementation "com.android.support:support-annotations:$SUPPORT_ANNOTATIONS_VERSION"
   implementation "com.squareup.retrofit2:retrofit:$RETROFIT_VERSION"
   implementation "com.squareup.okhttp3:okhttp:$OK_HTTP_VERSION"
   implementation "com.squareup.okio:okio:$OKIO_VERSION"

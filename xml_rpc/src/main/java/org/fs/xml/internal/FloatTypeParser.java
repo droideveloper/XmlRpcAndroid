@@ -23,11 +23,18 @@ import java.io.IOException;
 
 class FloatTypeParser implements TypeParser<Float> {
 
-  public static FloatTypeParser create() {
-    return new FloatTypeParser();
+  private static TypeParser<Float> instance;
+
+  static TypeParser<Float> getInstance() {
+    synchronized (FloatTypeParser.class) {
+      if (instance == null) {
+        instance = new FloatTypeParser();
+      }
+      return instance;
+    }
   }
 
-  private FloatTypeParser() {}
+  FloatTypeParser() {}
 
   @Override public void write(XmlSerializer writer, Float value) throws IOException {
     writer.startTag(null, Constants.FLOAT);

@@ -26,28 +26,48 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
 
+import static org.fs.xml.internal.Constants.GMT_TIMEZONE;
+import static org.fs.xml.internal.Constants.ISO_DATE;
+
 class DateTypeParser implements TypeParser<Date> {
-
-  private final SimpleDateFormat objParser;
-
-  public static DateTypeParser create() {
-    return create("yyyyMMdd'T'HH:mm:ss");
-  }
-
-  public static DateTypeParser create(String str) {
-    return create(str, Locale.getDefault());
-  }
-
-  public static DateTypeParser create(String str, Locale locale) {
-    return create(str, locale, TimeZone.getTimeZone("GMT"));
-  }
 
   public static DateTypeParser create(String str, Locale locale, TimeZone zone) {
     return new DateTypeParser(str, locale, zone);
   }
 
-  private DateTypeParser(String str, Locale locale, TimeZone zone) {
-    this.objParser = new SimpleDateFormat(str, locale);
+  private static DateTypeParser instance;
+
+  static DateTypeParser getInstance() {
+    return getInstance(ISO_DATE);
+  }
+
+  static DateTypeParser getInstance(String objFormat) {
+    return getInstance(objFormat, Locale.getDefault(), TimeZone.getTimeZone(GMT_TIMEZONE));
+  }
+
+  static DateTypeParser getInstance(String objFormat, Locale locale) {
+    return getInstance(objFormat, locale, TimeZone.getTimeZone(GMT_TIMEZONE));
+  }
+
+  static DateTypeParser getInstance(String objFormat, Locale locale, TimeZone zone) {
+    synchronized (DateTypeParser.class) {
+      if (instance == null) {
+        instance = new DateTypeParser(objFormat, locale, zone);
+      }
+      instance.setObjParser(objFormat, locale, zone);
+      return instance;
+    }
+  }
+
+  private SimpleDateFormat objParser;
+
+  DateTypeParser(String objFormat, Locale locale, TimeZone zone) {
+    this.objParser = new SimpleDateFormat(objFormat, locale);
+    this.objParser.setTimeZone(zone);
+  }
+
+  void setObjParser(String objFormat, Locale locale, TimeZone zone) {
+    this.objParser = new SimpleDateFormat(objFormat, locale);
     this.objParser.setTimeZone(zone);
   }
 

@@ -44,4 +44,9 @@ final class Constants {
 
   final static String REQUEST = "methodCall";
   final static String RESPONSE = "methodResponse";
+
+  final static String ISO_DATE = "yyyyMMdd'T'HH:mm:ss";
+  final static String GMT_TIMEZONE = "GMT";
+
+  final static String XML_SCHEMA = "http://xmlpull.org/v1/doc/features.html#indent-output";
 }

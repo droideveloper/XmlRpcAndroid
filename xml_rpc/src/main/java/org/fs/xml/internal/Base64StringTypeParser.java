@@ -24,11 +24,18 @@ import java.io.IOException;
 
 class Base64StringTypeParser implements TypeParser<Base64String> {
 
-  public static Base64StringTypeParser create() {
-    return new Base64StringTypeParser();
+  private static TypeParser<Base64String> instance;
+
+  static TypeParser<Base64String> getInstance() {
+    synchronized (Base64StringTypeParser.class) {
+      if (instance == null) {
+        instance = new Base64StringTypeParser();
+      }
+      return instance;
+    }
   }
 
-  private Base64StringTypeParser() {}
+  Base64StringTypeParser() { }
 
   @Override public void write(XmlSerializer writer, Base64String value) throws IOException {
     writer.startTag(null, Constants.BASE64);

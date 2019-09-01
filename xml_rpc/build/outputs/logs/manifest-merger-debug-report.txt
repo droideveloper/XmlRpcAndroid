@@ -1,37 +1,37 @@
 -- Merging decision tree log ---
 manifest
-ADDED from /Users/fatih/MyApplication/xml_rpc/src/main/AndroidManifest.xml:1:1-43
-INJECTED from /Users/fatih/MyApplication/xml_rpc/src/main/AndroidManifest.xml:1:1-43
-INJECTED from /Users/fatih/MyApplication/xml_rpc/src/main/AndroidManifest.xml:1:1-43
-INJECTED from /Users/fatih/MyApplication/xml_rpc/src/main/AndroidManifest.xml:1:1-43
-INJECTED from /Users/fatih/MyApplication/xml_rpc/src/main/AndroidManifest.xml:1:1-43
-INJECTED from /Users/fatih/MyApplication/xml_rpc/src/main/AndroidManifest.xml:1:1-43
-INJECTED from /Users/fatih/MyApplication/xml_rpc/src/main/AndroidManifest.xml:1:1-43
+ADDED from /Users/fatihsen/Desktop/XMLRpc_Workspace/xml_rpc/src/main/AndroidManifest.xml:1:1-43
+INJECTED from /Users/fatihsen/Desktop/XMLRpc_Workspace/xml_rpc/src/main/AndroidManifest.xml:1:1-43
+INJECTED from /Users/fatihsen/Desktop/XMLRpc_Workspace/xml_rpc/src/main/AndroidManifest.xml:1:1-43
+INJECTED from /Users/fatihsen/Desktop/XMLRpc_Workspace/xml_rpc/src/main/AndroidManifest.xml:1:1-43
+INJECTED from /Users/fatihsen/Desktop/XMLRpc_Workspace/xml_rpc/src/main/AndroidManifest.xml:1:1-43
+INJECTED from /Users/fatihsen/Desktop/XMLRpc_Workspace/xml_rpc/src/main/AndroidManifest.xml:1:1-43
+INJECTED from /Users/fatihsen/Desktop/XMLRpc_Workspace/xml_rpc/src/main/AndroidManifest.xml:1:1-43
 	package
-		ADDED from /Users/fatih/MyApplication/xml_rpc/src/main/AndroidManifest.xml:1:11-40
-		INJECTED from /Users/fatih/MyApplication/xml_rpc/src/main/AndroidManifest.xml
-		INJECTED from /Users/fatih/MyApplication/xml_rpc/src/main/AndroidManifest.xml
+		ADDED from /Users/fatihsen/Desktop/XMLRpc_Workspace/xml_rpc/src/main/AndroidManifest.xml:1:11-40
+		INJECTED from /Users/fatihsen/Desktop/XMLRpc_Workspace/xml_rpc/src/main/AndroidManifest.xml
+		INJECTED from /Users/fatihsen/Desktop/XMLRpc_Workspace/xml_rpc/src/main/AndroidManifest.xml
 	android:versionName
-		INJECTED from /Users/fatih/MyApplication/xml_rpc/src/main/AndroidManifest.xml
-		ADDED from /Users/fatih/MyApplication/xml_rpc/src/main/AndroidManifest.xml:1:1-43
-		INJECTED from /Users/fatih/MyApplication/xml_rpc/src/main/AndroidManifest.xml
+		INJECTED from /Users/fatihsen/Desktop/XMLRpc_Workspace/xml_rpc/src/main/AndroidManifest.xml
+		ADDED from /Users/fatihsen/Desktop/XMLRpc_Workspace/xml_rpc/src/main/AndroidManifest.xml:1:1-43
+		INJECTED from /Users/fatihsen/Desktop/XMLRpc_Workspace/xml_rpc/src/main/AndroidManifest.xml
 	xmlns:android
-		ADDED from /Users/fatih/MyApplication/xml_rpc/src/main/AndroidManifest.xml:1:1-43
+		ADDED from /Users/fatihsen/Desktop/XMLRpc_Workspace/xml_rpc/src/main/AndroidManifest.xml:1:1-43
 	android:versionCode
-		INJECTED from /Users/fatih/MyApplication/xml_rpc/src/main/AndroidManifest.xml
-		ADDED from /Users/fatih/MyApplication/xml_rpc/src/main/AndroidManifest.xml:1:1-43
-		INJECTED from /Users/fatih/MyApplication/xml_rpc/src/main/AndroidManifest.xml
+		INJECTED from /Users/fatihsen/Desktop/XMLRpc_Workspace/xml_rpc/src/main/AndroidManifest.xml
+		ADDED from /Users/fatihsen/Desktop/XMLRpc_Workspace/xml_rpc/src/main/AndroidManifest.xml:1:1-43
+		INJECTED from /Users/fatihsen/Desktop/XMLRpc_Workspace/xml_rpc/src/main/AndroidManifest.xml
 uses-sdk
-INJECTED from /Users/fatih/MyApplication/xml_rpc/src/main/AndroidManifest.xml reason: use-sdk injection requested
-INJECTED from /Users/fatih/MyApplication/xml_rpc/src/main/AndroidManifest.xml
-INJECTED from /Users/fatih/MyApplication/xml_rpc/src/main/AndroidManifest.xml
-INJECTED from /Users/fatih/MyApplication/xml_rpc/src/main/AndroidManifest.xml
-INJECTED from /Users/fatih/MyApplication/xml_rpc/src/main/AndroidManifest.xml
+INJECTED from /Users/fatihsen/Desktop/XMLRpc_Workspace/xml_rpc/src/main/AndroidManifest.xml reason: use-sdk injection requested
+INJECTED from /Users/fatihsen/Desktop/XMLRpc_Workspace/xml_rpc/src/main/AndroidManifest.xml
+INJECTED from /Users/fatihsen/Desktop/XMLRpc_Workspace/xml_rpc/src/main/AndroidManifest.xml
+INJECTED from /Users/fatihsen/Desktop/XMLRpc_Workspace/xml_rpc/src/main/AndroidManifest.xml
+INJECTED from /Users/fatihsen/Desktop/XMLRpc_Workspace/xml_rpc/src/main/AndroidManifest.xml
 	android:targetSdkVersion
-		INJECTED from /Users/fatih/MyApplication/xml_rpc/src/main/AndroidManifest.xml
-		ADDED from /Users/fatih/MyApplication/xml_rpc/src/main/AndroidManifest.xml
-		INJECTED from /Users/fatih/MyApplication/xml_rpc/src/main/AndroidManifest.xml
+		INJECTED from /Users/fatihsen/Desktop/XMLRpc_Workspace/xml_rpc/src/main/AndroidManifest.xml
+		ADDED from /Users/fatihsen/Desktop/XMLRpc_Workspace/xml_rpc/src/main/AndroidManifest.xml
+		INJECTED from /Users/fatihsen/Desktop/XMLRpc_Workspace/xml_rpc/src/main/AndroidManifest.xml
 	android:minSdkVersion
-		INJECTED from /Users/fatih/MyApplication/xml_rpc/src/main/AndroidManifest.xml
-		ADDED from /Users/fatih/MyApplication/xml_rpc/src/main/AndroidManifest.xml
-		INJECTED from /Users/fatih/MyApplication/xml_rpc/src/main/AndroidManifest.xml
+		INJECTED from /Users/fatihsen/Desktop/XMLRpc_Workspace/xml_rpc/src/main/AndroidManifest.xml
+		ADDED from /Users/fatihsen/Desktop/XMLRpc_Workspace/xml_rpc/src/main/AndroidManifest.xml
+		INJECTED from /Users/fatihsen/Desktop/XMLRpc_Workspace/xml_rpc/src/main/AndroidManifest.xml

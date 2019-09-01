@@ -15,6 +15,7 @@
  */
 package org.fs.xml.internal;
 
+import org.fs.xml.util.C;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlSerializer;
@@ -27,17 +28,25 @@ class StructTypeParser implements TypeParser<Map<String, ?>> {
 
   private final static String MEMBER = "member";
   private final static String NAME = "name";
-      //for this we gone hijack StringTypeConverter internally, yahoo
+  //for this we gone hijack StringTypeConverter internally, yahoo
   private final static String VALUE = "value";
 
-  private final StringTypeParser converter = StringTypeParser.create(StringTypeParser.STYLE_WRAP);
-      //we just gone read
+  private static TypeParser<Map<String, ?>> instance;
 
-  public static StructTypeParser create() {
-    return new StructTypeParser();
+  static TypeParser<Map<String, ?>> getInstance() {
+    synchronized (StringTypeParser.class) {
+      if (instance == null) {
+        instance = new StructTypeParser();
+      }
+      return instance;
+    }
   }
 
-  private StructTypeParser() {
+  private final Parsers parsers;
+  private final TypeParser<String> stringTypeParser = new StringTypeParser(C.STRING_WRAP_STYLE);
+
+  StructTypeParser() {
+    parsers = Parsers.getInstance();
   }
 
   @SuppressWarnings("unchecked") @Override public void write(XmlSerializer writer, Map<String, ?> value) throws IOException {
@@ -51,7 +60,7 @@ class StructTypeParser implements TypeParser<Map<String, ?>> {
       //writer value
       writer.startTag(null, VALUE);
       Object o = entry.getValue();
-      TypeParser converter = Parser.findWriteParser(o);
+      TypeParser converter = parsers.resolveWrite(o);
       converter.write(writer, o);
       writer.endTag(null, VALUE);
 
@@ -71,10 +80,10 @@ class StructTypeParser implements TypeParser<Map<String, ?>> {
         boolean ignore = Constants.STRUCT.equalsIgnoreCase(text) || MEMBER.equalsIgnoreCase(text) || VALUE.equalsIgnoreCase(text);
         if (!ignore) {
           if (NAME.equalsIgnoreCase(text)) {
-            key = converter.read(reader);//we read key
+            key = stringTypeParser.read(reader);//we read key
             continue;//internal next called
           } else if (text != null) {//I don't know why we getting name null
-            TypeParser converter = Parser.findReadParser(reader);
+            TypeParser converter = parsers.resolveRead(reader);
             Object object = converter.read(reader);
             if (key != null) {
               map.put(key, object);

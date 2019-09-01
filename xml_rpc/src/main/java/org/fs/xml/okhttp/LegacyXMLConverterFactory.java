@@ -15,7 +15,7 @@
  */
 package org.fs.xml.okhttp;
 
-import org.fs.xml.internal.Parser;
+import org.fs.xml.internal.Parsers;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
@@ -29,46 +29,55 @@ import retrofit2.Retrofit;
 
 public class LegacyXMLConverterFactory extends Converter.Factory {
 
-  private final Parser parser;
+  private final static String ISO_DATE = "yyyyMMdd'T'HH:mm:ss";
+  private final static String GMT_TIMEZONE = "GMT";
+
+  private Parsers parser;
+  private Converter<?, RequestBody> requestBodyConverter;
+  private Converter<ResponseBody, ?> responseBodyConverter;
 
   public static LegacyXMLConverterFactory create() {
     return new LegacyXMLConverterFactory();
   }
 
-  public static LegacyXMLConverterFactory create(Parser parser) {
-    return new LegacyXMLConverterFactory(parser);
+  public static LegacyXMLConverterFactory create(Parsers parser) {
+    final LegacyXMLConverterFactory factory = new LegacyXMLConverterFactory();
+    factory.setParser(parser);
+    return factory;
   }
 
   /**
    * Defaults initialized by api
    */
   private LegacyXMLConverterFactory() {
-    parser = new Parser();
-    parser.addBooleanConverter(true);//<boolean>1</boolean>
-    parser.addStringConverter(false);//wrapped <string>text</string>
-    parser.addDateConverter("yyyyMMdd'T'HH:mm:ss", Locale.getDefault(), TimeZone.getTimeZone("GMT"));
+    parser = Parsers.getInstance();
+    parser.registerBooleanConverter(true); // <boolean>1</boolean>
+    parser.registerStringConverter(false); // wrapped <string>text</string>
+    parser.registerDateConverter(ISO_DATE, Locale.getDefault(), TimeZone.getTimeZone(GMT_TIMEZONE));
+
+    requestBodyConverter = LegacyXMLRequestBodyConverter.create(parser);
+    responseBodyConverter = LegacyXMLResponseBodyConverter.create(parser);
   }
 
-  /**
-   * Pass custom Parser instance into Converter#Factory instance
-   *
-   * @param parser Parser parser instance
-   */
-  private LegacyXMLConverterFactory(Parser parser) {
+  public void setParser(Parsers parser) {
     this.parser = parser;
+    // parser can not be null
     if (parser == null) {
-      throw new NullPointerException("parser is null");
+      throw new IllegalArgumentException("parser can not be null");
     }
+    // re init
+    requestBodyConverter = LegacyXMLRequestBodyConverter.create(parser);
+    responseBodyConverter = LegacyXMLResponseBodyConverter.create(parser);
   }
 
   @Override public Converter<?, RequestBody> requestBodyConverter(Type type, Annotation[] parameterAnnotations, Annotation[] methodAnnotations, Retrofit retrofit) {
     if (!(type instanceof Class)) return null;
-    return LegacyXMLRequestBodyConverter.create(parser);
+    return requestBodyConverter;
   }
 
   @Override public Converter<ResponseBody, ?> responseBodyConverter(Type type, Annotation[] annotations,
       Retrofit retrofit) {
     if (!(type instanceof Class)) return null;
-    return LegacyXMLResponseBodyConverter.create(parser);
+    return responseBodyConverter;
   }
 }

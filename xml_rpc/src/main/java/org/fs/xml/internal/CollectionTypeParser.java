@@ -28,11 +28,21 @@ class CollectionTypeParser implements TypeParser<Collection<?>> {
   private final static String DATA = "data";
   private final static String VALUE = "value";
 
-  public static CollectionTypeParser create() {
-    return new CollectionTypeParser();
+  private static TypeParser<Collection<?>> instance;
+
+  static TypeParser<Collection<?>> getInstance() {
+    synchronized (CollectionTypeParser.class) {
+      if (instance == null) {
+        instance = new CollectionTypeParser();
+      }
+      return instance;
+    }
   }
 
-  private CollectionTypeParser() {
+  private final Parsers parsers;
+
+  CollectionTypeParser() {
+    parsers = Parsers.getInstance();
   }
 
   @SuppressWarnings("unchecked") @Override public void write(XmlSerializer writer, Collection<?> collection) throws IOException {
@@ -40,7 +50,7 @@ class CollectionTypeParser implements TypeParser<Collection<?>> {
     writer.startTag(null, DATA);
     for (Object object : collection) {
       writer.startTag(null, VALUE);
-      TypeParser converter = Parser.findWriteParser(object);
+      TypeParser converter = parsers.resolveWrite(object);
       converter.write(writer, object);
       writer.endTag(null, VALUE);
     }
@@ -58,7 +68,7 @@ class CollectionTypeParser implements TypeParser<Collection<?>> {
         boolean ignore = Constants.ARRAY.equalsIgnoreCase(text) || DATA.equalsIgnoreCase(text) || VALUE.equalsIgnoreCase(text);
         if (!ignore) {
           if (text != null) {//this shows null sometimes
-            TypeParser converter = Parser.findReadParser(reader);
+            TypeParser converter = parsers.resolveRead(reader);
             Object object = converter.read(reader);
             array.add(object);
             continue;//since we change internal converters we might get where we are already no need to call for next
